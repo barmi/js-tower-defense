@@ -10,17 +10,19 @@
 <header class="topbar">
     <div class="title">
         <span class="badge">TD</span>
-        <span>Grid Tower Defense</span>
+        <span>Build & Play TD</span>
     </div>
 
     <div class="stats">
+        <div class="stat"><div class="k">Mode</div><div class="v" id="modeLabel">GAME</div></div>
         <div class="stat"><div class="k">Wave</div><div class="v" id="wave">1</div></div>
         <div class="stat"><div class="k">Lives</div><div class="v" id="lives">20</div></div>
-        <div class="stat"><div class="k">Gold</div><div class="v" id="gold">100</div></div>
+        <div class="stat"><div class="k">Gold</div><div class="v" id="gold">120</div></div>
         <div class="stat"><div class="k">Enemies</div><div class="v" id="enemies">0</div></div>
     </div>
 
     <div class="actions">
+        <button id="btnMode" class="btn">Edit Mode</button>
         <button id="btnStart" class="btn primary">Start</button>
         <button id="btnNext" class="btn">Skip Wait</button>
         <button id="btnReset" class="btn danger">Reset</button>
@@ -29,41 +31,13 @@
 
 <main class="layout">
     <section class="game">
-        <!-- Main SVG scene (grid + entities) -->
         <svg id="scene" class="scene" width="960" height="600" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" aria-label="Tower defense scene">
-            <!-- SVG sprites (tower & enemy) -->
-            <defs>
-                <!-- Tower: simple turret -->
-                <symbol id="spr-tower" viewBox="0 0 64 64">
-                    <rect x="10" y="38" width="44" height="16" rx="6" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)"/>
-                    <rect x="22" y="20" width="20" height="22" rx="8" fill="rgba(79,139,255,0.30)" stroke="rgba(79,139,255,0.65)"/>
-                    <rect x="30" y="10" width="4" height="16" rx="2" fill="rgba(79,139,255,0.75)"/>
-                    <circle cx="32" cy="31" r="5" fill="rgba(255,255,255,0.75)"/>
-                </symbol>
-
-                <!-- Enemy: simple bug/robot -->
-                <symbol id="spr-enemy" viewBox="0 0 64 64">
-                    <path d="M18 30 C18 18, 46 18, 46 30 C46 44, 38 52, 32 52 C26 52, 18 44, 18 30 Z"
-                          fill="rgba(54,211,153,0.22)" stroke="rgba(54,211,153,0.75)" stroke-width="2"/>
-                    <circle cx="26" cy="30" r="4" fill="rgba(255,255,255,0.85)"/>
-                    <circle cx="38" cy="30" r="4" fill="rgba(255,255,255,0.85)"/>
-                    <path d="M24 16 L18 10" stroke="rgba(54,211,153,0.75)" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M40 16 L46 10" stroke="rgba(54,211,153,0.75)" stroke-width="3" stroke-linecap="round"/>
-                </symbol>
-
-                <!-- Bullet -->
-                <symbol id="spr-bullet" viewBox="0 0 16 16">
-                    <circle cx="8" cy="8" r="4" fill="rgba(255,255,255,0.9)"/>
-                </symbol>
-            </defs>
-
             <g id="grid"></g>
             <g id="path"></g>
             <g id="towers"></g>
             <g id="bullets"></g>
             <g id="enemiesLayer"></g>
 
-            <!-- overlay text -->
             <g id="overlay">
                 <text id="hint" x="18" y="28" fill="rgba(255,255,255,0.75)" font-size="14" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
                     Build a tower on an empty tile.
@@ -75,7 +49,7 @@
     </section>
 
     <aside class="side">
-        <div class="card">
+        <div class="card" id="buildCard">
             <div class="card-title">Build</div>
             <div class="card-body">
                 <div id="buildList" class="build-list"></div>
@@ -84,7 +58,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="upgradeCard">
             <div class="card-title">Tower Upgrade</div>
             <div class="card-body">
                 <div id="upgradePanel" class="small"></div>
@@ -95,15 +69,58 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-title">Controls</div>
-            <div class="card-body small">
-                <ul>
-                    <li><b>Start/Pause</b>: run or pause</li>
-                    <li><b>Skip Wait</b>: start next wave now</li>
-                    <li><b>Reset</b>: restart game</li>
-                    <li>Click tile: build/select tower</li>
-                </ul>
+        <div class="card editor-card" id="editorCard" hidden>
+            <div class="card-title">Editor</div>
+            <div class="card-body editor-body">
+                <div class="editor-section">
+                    <div class="section-title">Grid Size</div>
+                    <div class="editor-row">
+                        <label>Cols <input id="editCols" type="number" min="6" max="40" step="1" /></label>
+                        <label>Rows <input id="editRows" type="number" min="6" max="30" step="1" /></label>
+                        <button id="btnApplyGrid" class="btn">Apply</button>
+                    </div>
+                </div>
+
+                <div class="editor-section">
+                    <div class="section-title">Paint Tool</div>
+                    <div class="paint-tools" id="paintTools">
+                        <button class="tool-btn active" data-tool="empty" title="Empty"><span class="picon empty"></span></button>
+                        <button class="tool-btn" data-tool="path" title="Path"><span class="picon path"></span></button>
+                        <button class="tool-btn" data-tool="obstacle" title="Obstacle"><span class="picon obstacle"></span></button>
+                        <button class="tool-btn" data-tool="start" title="Start"><span class="picon start"></span></button>
+                        <button class="tool-btn" data-tool="end" title="End"><span class="picon end"></span></button>
+                        <button class="tool-btn" data-tool="clear_all" title="Clear All"><span class="picon clear"></span></button>
+                    </div>
+                    <div class="small">Path: drag. Others: click.</div>
+                </div>
+
+                <div class="editor-section">
+                    <div class="section-title">Tower Levels</div>
+                    <div class="editor-row">
+                        <label>Max Level <input id="maxLevelInput" type="number" min="2" max="8" step="1" /></label>
+                        <button id="btnApplyLevels" class="btn">Apply</button>
+                    </div>
+                    <table class="cfg-table" id="towerLevelTable"></table>
+                </div>
+
+                <div class="editor-section">
+                    <div class="section-title">Tower Base Stats</div>
+                    <table class="cfg-table" id="towerBaseTable"></table>
+                </div>
+
+                <div class="editor-section">
+                    <div class="section-title">Enemy Wave Growth</div>
+                    <table class="cfg-table" id="enemyTable"></table>
+                </div>
+
+                <div class="editor-section">
+                    <div class="section-title">Config String</div>
+                    <div class="editor-row">
+                        <button id="btnGenerate" class="btn primary">Generate</button>
+                        <button id="btnLoad" class="btn">Load</button>
+                    </div>
+                    <textarea id="configText" class="config-text" placeholder="Config string will appear here."></textarea>
+                </div>
             </div>
         </div>
 
