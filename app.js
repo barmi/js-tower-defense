@@ -58,48 +58,73 @@ const CELL = {
 
 const CONFIG = {
     tile: 56,
-    livesStart: 20,
-    goldStart: 120,
+    livesStart: 10,
+    goldStart: 80,
     autoNextWaveDelay: 2.2,
 };
 
 const DEFAULT_TOWER_TYPES = {
-    rifle: { id: "rifle", name: "Rifle", color: "#6ec5ff", cost: 30, damage: 10, fireRate: 2.4, rangeTiles: 2.9, bulletSpeedTiles: 9.5, bulletRadius: 4 },
-    rapid: { id: "rapid", name: "Rapid", color: "#8ee38a", cost: 40, damage: 5, fireRate: 5.4, rangeTiles: 2.4, bulletSpeedTiles: 10.8, bulletRadius: 3 },
-    sniper: { id: "sniper", name: "Sniper", color: "#ffcc66", cost: 55, damage: 30, fireRate: 0.75, rangeTiles: 4.6, bulletSpeedTiles: 14.5, bulletRadius: 5 },
+    rifle: { id: "rifle", name: "Rifle", color: "#6ec5ff", cost: 30, damage: 9, fireRate: 2.4, rangeTiles: 2.9, bulletSpeedTiles: 9.5, bulletRadius: 4 },
+    rapid: { id: "rapid", name: "Rapid", color: "#8ee38a", cost: 40, damage: 4.5, fireRate: 5.4, rangeTiles: 2.4, bulletSpeedTiles: 10.8, bulletRadius: 3 },
+    sniper: { id: "sniper", name: "Sniper", color: "#ffcc66", cost: 55, damage: 27, fireRate: 0.75, rangeTiles: 4.6, bulletSpeedTiles: 14.5, bulletRadius: 5 },
 };
 
 const DEFAULT_ENEMY_TYPES = {
     scout: {
         id: "scout", name: "Scout", color: "rgba(120,235,180,0.9)", shape: "scout", size: 0.9,
-        baseHp: 24, baseSpeedTiles: 1.55, reward: 6, leak: 1,
-        startWave: 1, countBase: 2, countMul: 1.08, hpMul: 1.08, speedMul: 1.02,
+        baseHp: 28, baseSpeedTiles: 1.55, reward: 5, leak: 1,
+        startWave: 1, countBase: 2, countMul: 1.12, hpMul: 1.12, speedMul: 1.02,
     },
     grunt: {
         id: "grunt", name: "Grunt", color: "rgba(88,205,230,0.88)", shape: "grunt", size: 1,
-        baseHp: 34, baseSpeedTiles: 1.1, reward: 8, leak: 1,
-        startWave: 1, countBase: 4, countMul: 1.1, hpMul: 1.1, speedMul: 1.015,
+        baseHp: 42, baseSpeedTiles: 1.1, reward: 6, leak: 1,
+        startWave: 1, countBase: 4, countMul: 1.13, hpMul: 1.14, speedMul: 1.015,
     },
     raider: {
         id: "raider", name: "Raider", color: "rgba(255,142,106,0.9)", shape: "raider", size: 1.05,
-        baseHp: 44, baseSpeedTiles: 1.25, reward: 10, leak: 2,
-        startWave: 4, countBase: 2, countMul: 1.08, hpMul: 1.1, speedMul: 1.02,
+        baseHp: 55, baseSpeedTiles: 1.25, reward: 8, leak: 2,
+        startWave: 4, countBase: 2, countMul: 1.12, hpMul: 1.14, speedMul: 1.02,
     },
     tank: {
         id: "tank", name: "Tank", color: "rgba(180,160,255,0.86)", shape: "tank", size: 1.18,
-        baseHp: 92, baseSpeedTiles: 0.72, reward: 14, leak: 2,
-        startWave: 5, countBase: 1, countMul: 1.06, hpMul: 1.12, speedMul: 1.01,
+        baseHp: 115, baseSpeedTiles: 0.72, reward: 11, leak: 2,
+        startWave: 5, countBase: 1, countMul: 1.10, hpMul: 1.16, speedMul: 1.01,
     },
     juggernaut: {
         id: "juggernaut", name: "Juggernaut", color: "rgba(255,92,124,0.86)", shape: "juggernaut", size: 1.28,
-        baseHp: 230, baseSpeedTiles: 0.55, reward: 30, leak: 4,
-        startWave: 8, countBase: 0, countMul: 1.05, hpMul: 1.16, speedMul: 1.01,
+        baseHp: 230, baseSpeedTiles: 0.55, reward: 22, leak: 4,
+        startWave: 8, countBase: 1, countMul: 1.08, hpMul: 1.18, speedMul: 1.01,
+    },
+    sprinter: {
+        id: "sprinter", name: "Sprinter", color: "rgba(255,222,120,0.92)", shape: "scout", size: 0.95,
+        baseHp: 220, baseSpeedTiles: 1.95, reward: 18, leak: 2,
+        startWave: 11, countBase: 2, countMul: 1.10, hpMul: 1.16, speedMul: 1.015,
+    },
+    brute: {
+        id: "brute", name: "Brute", color: "rgba(220,128,72,0.9)", shape: "tank", size: 1.22,
+        baseHp: 600, baseSpeedTiles: 0.95, reward: 24, leak: 3,
+        startWave: 13, countBase: 1, countMul: 1.10, hpMul: 1.18, speedMul: 1.01,
+    },
+    wraith: {
+        id: "wraith", name: "Wraith", color: "rgba(170,128,255,0.88)", shape: "raider", size: 1.05,
+        baseHp: 520, baseSpeedTiles: 1.35, reward: 25, leak: 3,
+        startWave: 15, countBase: 1, countMul: 1.08, hpMul: 1.16, speedMul: 1.02,
+    },
+    behemoth: {
+        id: "behemoth", name: "Behemoth", color: "rgba(255,76,108,0.92)", shape: "juggernaut", size: 1.42,
+        baseHp: 1500, baseSpeedTiles: 0.55, reward: 55, leak: 5,
+        startWave: 18, countBase: 1, countMul: 1.07, hpMul: 1.20, speedMul: 1.005,
+    },
+    overlord: {
+        id: "overlord", name: "Overlord", color: "rgba(255,52,170,0.94)", shape: "juggernaut", size: 1.55,
+        baseHp: 3200, baseSpeedTiles: 0.5, reward: 100, leak: 8,
+        startWave: 22, countBase: 1, countMul: 1.06, hpMul: 1.20, speedMul: 1.005,
     },
 };
 
 const DEFAULT_LEVEL_RULES = [
-    { level: 2, gold: 1.35, damage: 1.32, rate: 1.14, range: 1.08 },
-    { level: 3, gold: 1.45, damage: 1.38, rate: 1.12, range: 1.1 },
+    { level: 2, gold: 1.55, damage: 1.32, rate: 1.14, range: 1.08 },
+    { level: 3, gold: 1.65, damage: 1.38, rate: 1.12, range: 1.1 },
 ];
 
 const STATE = {
@@ -123,7 +148,7 @@ const STATE = {
     bullets: [],
     towerMap: new Map(),
 
-    spawn: { active: false, queue: [], spawned: 0, cooldown: 0, nextWaveCd: 0 },
+    spawn: { active: false, queue: [], spawned: 0, cooldown: 0, nextWaveCd: 0, lastWave: 0 },
 
     selectedBuildType: "rifle",
     selectedTowerId: null,
@@ -241,7 +266,7 @@ function resetGameState() {
     STATE.wave = 1;
     STATE.lives = CONFIG.livesStart;
     STATE.gold = CONFIG.goldStart;
-    STATE.spawn = { active: false, queue: [], spawned: 0, cooldown: 0, nextWaveCd: 0 };
+    STATE.spawn = { active: false, queue: [], spawned: 0, cooldown: 0, nextWaveCd: 0, lastWave: 0 };
     hidePlacementPreview();
     setNote("Ready.");
 }
@@ -1000,13 +1025,13 @@ function createEnemyVisual(type) {
     return { root, hpFg };
 }
 
-function makeEnemy(typeId) {
+function makeEnemy(typeId, spawnWave = STATE.wave) {
     const type = STATE.settings.enemyTypes[typeId];
     if (!type || !STATE.start) return null;
 
     const p0 = cellToCenter(STATE.start.c, STATE.start.r);
 
-    const step = Math.max(0, STATE.wave - type.startWave);
+    const step = Math.max(0, spawnWave - type.startWave);
     const hp = type.baseHp * Math.pow(type.hpMul, step);
     const speedTiles = type.baseSpeedTiles * Math.pow(type.speedMul, step);
 
@@ -1071,13 +1096,13 @@ function composeWave(wave) {
         const count = Math.floor(e.countBase * Math.pow(e.countMul, step));
         if (count <= 0) continue;
         for (let i = 0; i < count; i++) {
-            const interval = clamp(0.58 - wave * 0.01 + i * 0.002, 0.2, 0.75);
-            queue.push({ typeId: e.id, interval });
+            const interval = clamp(0.58 - wave * 0.012 + i * 0.002, 0.18, 0.75);
+            queue.push({ typeId: e.id, interval, wave });
         }
     }
 
     if (queue.length === 0) {
-        for (let i = 0; i < 5; i++) queue.push({ typeId: "grunt", interval: 0.45 });
+        for (let i = 0; i < 5; i++) queue.push({ typeId: "grunt", interval: 0.45, wave });
     }
 
     return queue;
@@ -1111,8 +1136,21 @@ function spawnWave() {
     STATE.spawn.spawned = 0;
     STATE.spawn.cooldown = 0;
     STATE.spawn.nextWaveCd = 0;
+    STATE.spawn.lastWave = STATE.wave;
 
     setNote(`Wave ${STATE.wave}: ${summarizeWave(queue)}`);
+}
+
+function chainNextWave() {
+    if (!STATE.spawn.active) return false;
+    const next = (STATE.spawn.lastWave || STATE.wave) + 1;
+    const extra = composeWave(next);
+    if (extra.length === 0) return false;
+    STATE.spawn.queue.push(...extra);
+    STATE.spawn.lastWave = next;
+    STATE.wave = next;
+    setNote(`Wave ${next} chained: ${summarizeWave(extra)}`);
+    return true;
 }
 
 function updateSpawner(dt) {
@@ -1129,7 +1167,7 @@ function updateSpawner(dt) {
 
     if (STATE.spawn.queue.length > 0) {
         const next = STATE.spawn.queue.shift();
-        const e = makeEnemy(next.typeId);
+        const e = makeEnemy(next.typeId, next.wave);
         if (e) STATE.enemies.push(e);
         STATE.spawn.spawned += 1;
         STATE.spawn.cooldown = next.interval;
@@ -1138,7 +1176,7 @@ function updateSpawner(dt) {
 
     if (STATE.enemies.length === 0) {
         STATE.spawn.active = false;
-        STATE.wave += 1;
+        STATE.wave = (STATE.spawn.lastWave || STATE.wave) + 1;
         STATE.spawn.nextWaveCd = CONFIG.autoNextWaveDelay;
         setNote(`Wave clear. Next in ${CONFIG.autoNextWaveDelay.toFixed(1)}s`);
     }
@@ -1535,6 +1573,10 @@ function hookEvents() {
         if (STATE.mode !== "game") return;
         if (!STATE.running) {
             setNote("Press Start.");
+            return;
+        }
+        if (STATE.spawn.active) {
+            chainNextWave();
             return;
         }
         STATE.spawn.nextWaveCd = 0;
