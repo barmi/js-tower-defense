@@ -9,6 +9,7 @@ const UI = {
     hint: document.getElementById("hint"),
 
     btnMode: document.getElementById("btnMode"),
+    btnSpeed: document.getElementById("btnSpeed"),
     btnStart: document.getElementById("btnStart"),
     btnNext: document.getElementById("btnNext"),
     btnReset: document.getElementById("btnReset"),
@@ -131,6 +132,7 @@ const STATE = {
     mode: "game",
     running: false,
     startedOnce: false,
+    speed: 1,
     tPrev: performance.now(),
 
     cols: 16,
@@ -1258,6 +1260,16 @@ function updateStartButtonLabel() {
     UI.btnStart.textContent = STATE.running ? "Pause" : "Resume";
 }
 
+function refreshSpeedButton() {
+    UI.btnSpeed.classList.toggle("primary", STATE.speed === 2);
+}
+
+function updateActionButtons() {
+    const inGameRunning = STATE.mode === "game" && STATE.running;
+    UI.btnMode.hidden = inGameRunning;
+    UI.btnSpeed.hidden = !inGameRunning;
+}
+
 function syncUI() {
     UI.modeLabel.textContent = STATE.mode.toUpperCase();
     UI.wave.textContent = String(STATE.wave);
@@ -1281,6 +1293,7 @@ function syncUI() {
     ].join("\n");
 
     updateStartButtonLabel();
+    updateActionButtons();
     renderUpgradePanel();
 }
 
@@ -1289,10 +1302,13 @@ function tick(now) {
     STATE.tPrev = now;
 
     if (STATE.running && STATE.mode === "game") {
-        updateSpawner(dt);
-        updateEnemies(dt);
-        updateTowers(dt);
-        updateBullets(dt);
+        const steps = Math.max(1, Math.round(STATE.speed));
+        for (let i = 0; i < steps; i++) {
+            updateSpawner(dt);
+            updateEnemies(dt);
+            updateTowers(dt);
+            updateBullets(dt);
+        }
     }
 
     syncUI();
@@ -1552,6 +1568,11 @@ function loadConfigFromString(str) {
 function hookEvents() {
     UI.btnMode.addEventListener("click", () => {
         setMode(STATE.mode === "game" ? "edit" : "game");
+    });
+
+    UI.btnSpeed.addEventListener("click", () => {
+        STATE.speed = STATE.speed === 2 ? 1 : 2;
+        refreshSpeedButton();
     });
 
     UI.btnStart.addEventListener("click", () => {
